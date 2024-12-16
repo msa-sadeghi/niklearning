@@ -1,0 +1,51 @@
+{% extends '../base.html' %}
+
+{% block css %}
+
+{% endblock css %}
+
+{% block js %}
+
+{% endblock js %}
+
+{% block title %}
+niklearning
+{% endblock title %}
+
+{% block headercontent %}
+          <p class="col-md-12 fs-4">اگر قصد ورود به بازار کار برنامه نویسی دارید فرصت را از دست ندهید. در این مجموعه آموزشی به صورت پروژه محور و مطابق لبه تکنولوژی تمام اطلاعات و مهارت های لازم برای ورود به بازار کار به شما آموزش داده خواهد شد.
+          </p>
+          {% endblock headercontent %}
+
+
+{% block content %}
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+    {% for tutorial in tutorials %}
+    <div class="col">
+      <div class="card shadow-sm">
+        <svg class="bd-placeholder-img card-img-top" width="100%" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="100%" y="50%" fill="#eceeef" dy="">{{tutorial.name}}</text></svg>
+        <img src="{{tutorial.image.url}}" class="card-img-top center-block" alt="..." >
+        <div class="card-body">
+          <p class="card-text"></p>
+          <div class="d-flex justify-content-center align-items-center">
+            <div class="btn-group">
+              <a href="{{tutorial.get_absolute_url}}">
+                <button type="button" class="btn btn-sm btn-outline-secondary">مشاهده دوره</button>
+              </a>
+              
+              <a href="{% url 'store:register_specific' tut_name=tutorial.name %}">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">ثبت نام</button>
+              </a>
+              
+         
+            </div>
+            {% comment %} <small class="text-muted">9 mins</small> {% endcomment %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+
+{% endblock content %}

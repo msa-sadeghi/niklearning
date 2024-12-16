@@ -1,0 +1,137 @@
+{% extends '../base.html' %}
+{% load humanize %}
+{% block css %}
+
+{% endblock css %}
+
+{% block js %}
+
+{% endblock js %}
+
+{% block title %}
+{{product.name}}
+{% endblock title %}
+
+{% block content %}
+    <div style="text-align: center;">
+
+    <video width="320" height="240" controls>
+      {% load static %}
+      <source src="{{ product.video.url }}" type="video/mp4"></source>
+        Your browser does not support the video tag
+      </video>
+  </div>
+
+    <h2 class="mt-5 text-center">{{product.name}}</h2>
+    <hr>
+  <div class="row">
+    <div class="col-md-12">
+
+      <article class="blog-post">
+        <h3 class="blog-post-title">معرفی دوره</h3>
+
+        <p>{{product.description|linebreaks}}</p>
+        
+      </article>
+      <hr>
+      <article class="blog-post">
+        <h3 class="blog-post-title">سرفصل دوره</h3>
+
+        <p>{{product.headings|linebreaks}}</p>
+        
+      </article>
+      <hr>
+      <article class="blog-post">
+        <h3 class="blog-post-title">دوره آنلاین</h3>
+  
+      </article>
+  
+     <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">تعداد جلسات</th>
+            <th scope="col">مدت هر جلسه</th>
+            <th scope="col">قیمت هر جلسه</th>
+            <th scope="col">قیمت کل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="show">
+            <td>{{product.episode_number}}</td>
+            <td>یک ساعت</td>
+            <td>
+                <div class="d-flex">
+                <p>
+                    
+                {{episode_price_online|intcomma}}
+                </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+            <td>
+                 <div class="d-flex">
+                <p>
+                {{total_price_online|intcomma}}
+                </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <hr><hr>
+      
+     <article class="blog-post">
+        <h3 class="blog-post-title">دوره آفلاین</h3>
+        
+        
+      </article>
+     <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">تعداد جلسات</th>
+            <th scope="col">مدت هر جلسه</th>
+            <th scope="col">قیمت هر جلسه</th>
+            <th scope="col">قیمت کل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="show">
+            <td>{{product.episode_number}}</td>
+            <td>یک ساعت</td>
+            <td>
+                <div class="d-flex">
+                <p>
+                    
+                {{episode_price|intcomma}}
+                </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+            <td>
+                 <div class="d-flex">
+                <p>
+                {{total_price|intcomma}}
+                </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+
+      <nav class="blog-pagination" aria-label="Pagination">
+        
+        <a class="btn btn-outline-success" href="{% url 'store:register_specific' tut_name=product.name %}">ثبت نام</a>
+        <a class="btn btn-outline-secondary disabled">مشاوره رایگان</a>
+      </nav>
+
+    </div>
+
+
+
+
+
+{% endblock content %}

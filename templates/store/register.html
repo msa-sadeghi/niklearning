@@ -1,0 +1,247 @@
+{% extends '../base.html' %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+{% block css %}
+
+{% endblock css %}
+
+{% block js %}
+
+{% endblock js %}
+
+{% block title %}
+niklearning
+{% endblock title %}
+
+{% block content %}
+
+<form action="/register/" method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">نام : </label>
+        <input type="text" class="form-control" name="name" id="name">
+        {% if submitted and form.errors.name %}
+        <div class="alert alert-danger">
+            {{ form.errors.name }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="family">نام خانوادگی : </label>
+        <input type="text" class="form-control" name="family" id="family">
+        {% if submitted and form.errors.family %}
+        <div class="alert alert-danger">
+            {{ form.errors.family }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="age">سن : </label>
+        <input type="number" class="form-control" name="age"  id="age">
+        {% if submitted and form.errors.age %}
+        <div class="alert alert-danger">
+            {{ form.errors.age }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="email">ایمیل : </label>
+        <input type="email" class="form-control" name="email" id="email">
+        {% if submitted and form.errors.email %}
+        <div class="alert alert-danger">
+            {{ form.errors.email }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="mobile">موبایل : </label>
+        <input type="number" class="form-control" name="mobile" id="mobile">
+        {% if submitted and form.errors.mobile %}
+        <div class="alert alert-danger">
+            {{ form.errors.mobile }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="form-group">
+        <label for="tutorial">دوره آموزشی : </label>
+        <select name="tutorial" id="tutorial" class="form-control">
+            {% for value, text in form.fields.tutorial.choices %}
+            <option value="{{ value }}" {% if text in name %} selected {% endif %}>{{ text }}</option>
+             {% endfor %}
+        </select>
+    </div>
+    
+    <div class="form-group">
+        <label for="type">نوع دوره</label>
+        <select name="type" id="select_tutorial" class="form-control">
+            {% for value, text in form.fields.type.choices %}
+            <option value="{{ value }}" >{{ text }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">تعداد جلسات</th>
+            <th scope="col">مدت هر جلسه</th>
+            <th scope="col">قیمت هر جلسه</th>
+            <th scope="col">قیمت کل</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr id="show">
+            <td>{{tutorial_data.episode_number}}</td>
+            <td>یک ساعت</td>
+            <td>
+            <div class="d-flex">
+                <p>    
+                {{episode_price_online|intcomma}}
+                </p>
+                <p><b>تومان</b></p>
+                </div>
+                
+            </td>
+            <td>
+                <div class="d-flex">
+                <p> 
+                {{total_price_online|intcomma}}
+                </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+      <div class="form-group">
+        <label for="tutorial_episode_select">تعداد جلسات مورد نیاز شما</label>
+        <select name="tutorial_episode_select" id="tutorial_episode_select" class="form-control">
+            {% with ''|center:tutorial_data.episode_number as range %}
+            {% for value in range %}
+            <option value="{{ value }}" >{{ forloop.counter }}</option>
+            {% endfor %}
+            {% endwith %}
+        </select>
+    </div>
+    <div id = "price_calc_btn" onclick="price_btn_clicked()" class="btn btn-outline-success form-control">محاسبه قیمت</div>
+    <div class="d-flex">
+        <p>قیمت کل :</p>
+        <div id="total_price"></div>
+        <p>تومان</p>
+    </div>
+    <input type="submit" id="register_btn" class="btn btn-outline-success form-control" disabled value="ثبت نام">
+</form>
+
+<script>
+    // to enable register button after calc button clicked
+     function price_btn_clicked() {
+            document.getElementById("register_btn").disabled = false;
+        }
+
+    // determine which tutorual type user selected, online or offline
+    var show = document.getElementById("show");
+    var select = document.getElementById("select_tutorial");
+
+    select.onchange = function(){
+    value = select.options[select.selectedIndex].text;
+    if(value == "آفلاین"){
+        show.innerHTML = `<tr>
+            <td>{{tutorial_data.episode_number}}</td>
+            <td>یک ساعت</td>
+            <td>
+            <div class="d-flex">
+                <p> 
+            {{episode_price|intcomma}}
+            </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+            <td>
+            <div class="d-flex">
+                <p> 
+            {{total_price|intcomma}}
+            </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+          </tr>`;
+    }
+    else if(value == "آنلاین"){
+        show.innerHTML = `<tr>
+            <td>{{tutorial_data.episode_number}}</td>
+            <td>یک ساعت</td>
+            <td>
+            <div class="d-flex">
+                <p>
+            {{episode_price_online|intcomma}}
+            </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+            <td>
+            <div class="d-flex">
+                <p>
+            {{total_price_online|intcomma}}
+            </p>
+                <p><b>تومان</b></p>
+                </div>
+            </td>
+          </tr>`;
+    }
+    }
+
+     
+
+    // get csrf token
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+                }
+        }
+    }
+    return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+
+      //send ajax request to store views file to get total_price  
+    $(document).ready(function () {
+        $("#price_calc_btn").click(function (event) {
+            var online_or_offline = $('#select_tutorial').find(":selected").text()
+            if (online_or_offline == "آنلاین"){
+                online_or_offline = "online"
+            }
+            else{
+                online_or_offline = "offline"
+
+            }
+            $.ajax({
+                type: "POST",
+                url: "/selection_price/",
+                data: {
+                    'value_episode': $('#tutorial_episode_select').find(":selected").text(), // from form
+                    'select_tutorial': online_or_offline, // from form
+                    'tutorial_data_id': `{{tutorial_data.id}}`, // from form
+                    'csrfmiddlewaretoken':csrftoken
+                },
+
+                success: function (data) {
+                    $('#total_price').html(data.total_price_per_user_selected_options_toman);
+                }
+                });
+        });
+    });
+  
+  
+</script>
+
+
+{% endblock content %}
